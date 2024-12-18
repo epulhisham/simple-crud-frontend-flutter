@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:task_manager/models/task.dart';
 
 class TaskServices {
-  final String baseUrl = "http://192.168.0.241:8000/api";
+  final String baseUrl = "http://127.0.0.1:8000/api";
 
   Future<List<Task>> fetchTasks() async {
     final response = await http.get(Uri.parse('$baseUrl/tasks'));
