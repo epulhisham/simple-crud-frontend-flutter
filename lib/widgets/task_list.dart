@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/widgets/login.dart';
 import 'package:task_manager/widgets/task_create.dart';
 import 'package:task_manager/widgets/task_details.dart';
 import '../services/task_services.dart';
 import '../models/task.dart';
 
 class TaskList extends StatefulWidget {
-  const TaskList({super.key});
+  final String token;
+
+  const TaskList({super.key, required this.token});
   @override
   State<StatefulWidget> createState() {
     return _TaskListState();
@@ -18,13 +21,31 @@ class _TaskListState extends State<TaskList> {
   @override
   void initState() {
     super.initState();
-    _tasks = TaskServices().fetchTasks();
+    _tasks = TaskServices().fetchTasks(widget.token);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Task Manager')),
+      appBar: AppBar(
+        title: const Text('Task Manager'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              try {
+                await TaskServices().logout(widget.token);
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => const Login()));
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Logout failed: $e')),
+                );
+              }
+            },
+          ),
+        ],
+      ),
       body: FutureBuilder<List<Task>>(
         future: _tasks,
         builder: (context, snapshot) {
@@ -59,7 +80,7 @@ class _TaskListState extends State<TaskList> {
                       // Refresh the task list if the task was updated
                       if (result == true) {
                         setState(() {
-                          _tasks = TaskServices().fetchTasks();
+                          _tasks = TaskServices().fetchTasks(widget.token);
                         });
                       }
                     },
@@ -78,7 +99,7 @@ class _TaskListState extends State<TaskList> {
           );
 
           setState(() {
-            _tasks = TaskServices().fetchTasks();
+            _tasks = TaskServices().fetchTasks(widget.token);
           });
         },
         child: Icon(Icons.add),

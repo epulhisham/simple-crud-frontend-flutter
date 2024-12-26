@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_manager/widgets/login.dart';
+import 'package:task_manager/widgets/register.dart';
 import 'package:task_manager/widgets/task_list.dart';
 
 void main() {
@@ -7,6 +10,12 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+  Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('auth_token');
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,7 +28,23 @@ class MyApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: const Color.fromARGB(255, 50, 58, 60),
       ),
-      home: const TaskList(),
+      home: FutureBuilder<String?>(
+        future: getToken(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (snapshot.hasData && snapshot.data != null) {
+            return TaskList(token: snapshot.data!);
+          }
+          return const Login();
+        },
+      ),
+      routes: {
+        '/register': (context) => const Register(),
+      },
     );
   }
 }
