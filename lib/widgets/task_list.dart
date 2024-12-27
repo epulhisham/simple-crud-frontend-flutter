@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/widgets/file_list.dart';
+import 'package:task_manager/widgets/file_upload.dart';
 import 'package:task_manager/widgets/login.dart';
 import 'package:task_manager/widgets/task_create.dart';
 import 'package:task_manager/widgets/task_details.dart';
@@ -30,6 +32,26 @@ class _TaskListState extends State<TaskList> {
       appBar: AppBar(
         title: const Text('Task Manager'),
         actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FileList(token: widget.token)),
+              );
+            },
+            icon: const Icon(Icons.folder),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FileUpload(token: widget.token)),
+              );
+            },
+            icon: const Icon(Icons.upload),
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {

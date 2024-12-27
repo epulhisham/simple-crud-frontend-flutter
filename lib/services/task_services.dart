@@ -1,10 +1,35 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:task_manager/models/task.dart';
 
 class TaskServices {
   final String baseUrl = "http://192.168.0.241:8000/api";
+
+  Future<void> uploadFile(String token, File file) async {
+    final uri = Uri.parse('$baseUrl/files/upload');
+    final request = http.MultipartRequest('POST', uri);
+
+    request.headers['Authorization'] = 'Bearer $token';
+    request.files.add(await http.MultipartFile.fromPath('file', file.path));
+
+    final response = await request.send();
+
+    if (response.statusCode != 201) {
+      throw Exception('Failed to upload file');
+    }
+  }
+
+  Future<List<dynamic>> fetchFiles(String token) async {
+    final response = await http.get(Uri.parse('$baseUrl/files'), headers: {'Authorization': 'Bearer $token'});
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to load files');
+    }
+  }
 
   Future<void> logout(String token) async {
     final response = await http.post(
