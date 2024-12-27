@@ -95,7 +95,7 @@ class _TaskListState extends State<TaskList> {
                       final result = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => TaskDetails(task: task),
+                          builder: (context) => TaskDetails(task: task, token: widget.token,),
                         ),
                       );
 
@@ -117,7 +117,7 @@ class _TaskListState extends State<TaskList> {
         onPressed: () async {
           await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => TaskCreate()),
+            MaterialPageRoute(builder: (context) => TaskCreate(token: widget.token,)),
           );
 
           setState(() {

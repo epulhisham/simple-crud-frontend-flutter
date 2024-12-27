@@ -4,8 +4,9 @@ import '../services/task_services.dart';
 
 class TaskDetails extends StatefulWidget {
   final Task task;
+  final String token;
 
-  const TaskDetails({required this.task, super.key});
+  const TaskDetails({required this.task, super.key, required this.token});
 
   @override
   State<TaskDetails> createState() => _TaskDetailsState();
@@ -36,7 +37,7 @@ class _TaskDetailsState extends State<TaskDetails> {
       );
 
       try {
-        await TaskServices().updateTask(updatedTask);
+        await TaskServices().updateTask(updatedTask, widget.token);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Task updated successfully!')),
         );
@@ -51,7 +52,7 @@ class _TaskDetailsState extends State<TaskDetails> {
 
   Future<void> _deleteTask() async {
     try {
-      await TaskServices().deleteTask(widget.task.id);
+      await TaskServices().deleteTask(widget.task.id, widget.token);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Task deleted successfully!')),
       );

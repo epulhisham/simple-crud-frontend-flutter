@@ -3,7 +3,8 @@ import '../services/task_services.dart';
 import '../models/task.dart';
 
 class TaskCreate extends StatefulWidget {
-  const TaskCreate({super.key});
+  final String token;
+  const TaskCreate({super.key, required this.token});
   @override
   State<StatefulWidget> createState() {
     return _TaskCreateState();
@@ -29,7 +30,7 @@ class _TaskCreateState extends State<TaskCreate> {
         );
 
         // Call TaskServices to create the task
-        await TaskServices().createTask(task);
+        await TaskServices().createTask(task, widget.token);
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Task created successfully!')),

@@ -22,7 +22,8 @@ class TaskServices {
   }
 
   Future<List<dynamic>> fetchFiles(String token) async {
-    final response = await http.get(Uri.parse('$baseUrl/files'), headers: {'Authorization': 'Bearer $token'});
+    final response = await http.get(Uri.parse('$baseUrl/files'),
+        headers: {'Authorization': 'Bearer $token'});
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -60,10 +61,13 @@ class TaskServices {
     }
   }
 
-  Future<void> createTask(Task task) async {
+  Future<void> createTask(Task task, String token) async {
     final response = await http.post(
       Uri.parse('$baseUrl/tasks'),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
       body: jsonEncode({
         'title': task.title,
         'description': task.description,
@@ -76,10 +80,13 @@ class TaskServices {
     }
   }
 
-  Future<void> updateTask(Task task) async {
+  Future<void> updateTask(Task task, String token) async {
     final response = await http.put(
       Uri.parse('$baseUrl/tasks/${task.id}'),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
       body: jsonEncode({
         'title': task.title,
         'description': task.description,
@@ -92,9 +99,12 @@ class TaskServices {
     }
   }
 
-  Future<void> deleteTask(int id) async {
+  Future<void> deleteTask(int id, String token) async {
     final response = await http.delete(
       Uri.parse('$baseUrl/tasks/$id'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
     );
 
     if (response.statusCode == 204 || response.statusCode == 200) {
