@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/widgets/login.dart';
 import 'package:task_manager/widgets/register.dart';
 import 'package:task_manager/widgets/task_list.dart';
 
-void main() {
+// void main() {
+//   runApp(const MyApp());
+// }
+
+Future<void> main() async {
+  await dotenv.load(fileName: ".env"); // Load .env file
+  print(dotenv.env);
   runApp(const MyApp());
 }
 

@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:task_manager/models/task.dart';
 
 class TaskServices {
-  final String baseUrl = "http://192.168.0.241:8000/api";
+  // final String baseUrl = "http://192.168.0.241:8000/api";
+  final String baseUrl = dotenv.env['BASE_URL']!;
+
 
   Future<void> uploadFile(String token, File file) async {
     final uri = Uri.parse('$baseUrl/files/upload');

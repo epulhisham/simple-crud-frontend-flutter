@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:task_manager/widgets/register.dart';
 import 'package:task_manager/widgets/task_list.dart';
@@ -22,7 +23,8 @@ class _LoginState extends State<Login> {
   bool _isLoading = false;
 
   Future<void> loginUser() async {
-    final url = Uri.parse('http://192.168.0.241:8000/api/login');
+    final String baseUrl = dotenv.env['BASE_URL']!;
+    final Uri url = Uri.parse('$baseUrl/login');
 
     try {
       setState(() {
